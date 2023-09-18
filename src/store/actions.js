@@ -776,4 +776,158 @@ export default {
       )
     })
   },
+  // 查询设备版本信息
+  async queryDeviceVersionInfo({ state }) {
+    const res = await this._vm.$bridge.sendLuaRequest(
+      {
+        operation: 'luaControl',
+        params: {
+          query_device_version_info: 'queryDeviceVersionInfo',
+        },
+        applianceId: state.deviceInfo.deviceId,
+        mode: 0,
+      },
+      false
+    )
+    this._vm.$bridge.showToast(
+      JSON.stringify({
+        query_device_version_info: 'queryDeviceVersionInfo',
+      })
+    )
+    return res
+  },
+  // 用户信息查询
+  async queryUserInfoMark({ state }) {
+    const res = await this._vm.$bridge.sendLuaRequest(
+      {
+        operation: 'luaControl',
+        params: {
+          query_userinfo_mark: 'queryUserinfo',
+        },
+        applianceId: state.deviceInfo.deviceId,
+        mode: 0,
+      },
+      false
+    )
+    this._vm.$bridge.showToast(
+      JSON.stringify({
+        query_userinfo_mark: 'queryUserinfo',
+      })
+    )
+    return res
+  },
+  // 恢复出厂数据
+  async resetFactory({ state }) {
+    const res = await this._vm.$bridge.sendLuaRequest(
+      {
+        operation: 'luaControl',
+        params: {
+          reset_factory: 'resetFactory',
+        },
+        applianceId: state.deviceInfo.deviceId,
+        mode: 0,
+      },
+      false
+    )
+    this._vm.$bridge.showToast(
+      JSON.stringify({
+        reset_factory: 'resetFactory',
+      })
+    )
+    return res
+  },
+  // 电量查询
+  async batteryLevelMark({ state }) {
+    const res = await this._vm.$bridge.sendLuaRequest(
+      {
+        operation: 'luaControl',
+        params: {
+          battery_level_mark: 'queryBatteryLevel',
+        },
+        applianceId: state.deviceInfo.deviceId,
+        mode: 0,
+      },
+      false
+    )
+    this._vm.$bridge.showToast(
+      JSON.stringify({
+        battery_level_mark: 'queryBatteryLevel',
+      })
+    )
+    return res
+  },
+  // 查询设备SN
+  async queryDeviceSnMark({ state }) {
+    const res = await this._vm.$bridge.sendLuaRequest(
+      {
+        operation: 'luaControl',
+        params: {
+          query_device_sn_mark: 'queryDeviceSn',
+        },
+        applianceId: state.deviceInfo.deviceId,
+        mode: 0,
+      },
+      false
+    )
+    this._vm.$bridge.showToast(
+      JSON.stringify({
+        query_device_sn_mark: 'queryDeviceSn',
+      })
+    )
+    return res
+  },
+  // 同步历史数据
+  async querySynchronization({ state }) {
+    const res = await this._vm.$bridge.sendLuaRequest(
+      {
+        operation: 'luaControl',
+        params: {
+          synchronization_mark: 'querySynchronization',
+          synchronization_user_pin: '1003',
+        },
+        applianceId: state.deviceInfo.deviceId,
+        mode: 0,
+      },
+      false
+    )
+    this._vm.$bridge.showToast(
+      JSON.stringify({
+        synchronization_mark: 'querySynchronization',
+        synchronization_user_pin: '1003',
+      })
+    )
+    return res
+  },
+  // 设置新增加用户PIN
+  async addUserPIN({ state }) {
+    const res = await this._vm.$bridge.sendLuaRequest(
+      {
+        operation: 'luaControl',
+        params: {
+          add_user_pin_mark: 'addUserPin',
+          add_user_pin: '1',
+          add_user_age: '25',
+          add_user_sex: 'male',
+          add_user_height: '150',
+          add_user_weight: '60.56',
+          add_user_timestamp: '666666',
+        },
+        applianceId: state.deviceInfo.deviceId,
+        mode: 0,
+      },
+      false
+    )
+    this._vm.$bridge.showToast(
+      JSON.stringify({
+        add_user_pin_mark: 'addUserPin',
+        add_user_pin: '1',
+        add_user_age: '25',
+        add_user_sex: 'male',
+        add_user_height: '150',
+        add_user_weight: '60.56',
+        add_user_timestamp: '666666',
+      })
+    )
+    return res
+  },
 }
