@@ -22,7 +22,7 @@ export function decode(resource) {
     if (lent < 0) lent += 256
     const d = lent ^ x1
 
-    decryptedData.push(d.toString(16))
+    decryptedData.push(d.toString(16).padStart(2, '0').slice(-2))
 
     // 更新加密因子
     let y2 = x1 ^ y1
