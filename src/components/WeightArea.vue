@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" @click="go2Detail">
     <div class="circle_box">
       <image
         class="circle"
@@ -8,7 +8,7 @@
       ></image>
       <text class="weight_text">{{ showWeight }}</text>
       <text class="unit_text">体重（{{ unit }}）</text>
-      <text class="target_text" @click="go2More">目标体重：{{ target }}kg</text>
+      <text class="target_text">目标体重：{{ target }}kg</text>
     </div>
     <text class="time_text">最近更新{{ time }}</text>
   </div>
@@ -18,6 +18,9 @@
 import pageBase from '../mixins/pageBase'
 import disconnect from '../assets/image/disconnect.png'
 import connectIcon from '../assets/image/connect.png'
+import debugUtil from '../util/debugUtil'
+
+const detailChannel = new BroadcastChannel('dataDetail')
 
 export default {
   components: {},
@@ -68,6 +71,15 @@ export default {
       this.$bridge.push({
         url: 'more.js',
       })
+    },
+    go2Detail() {
+      this.$bridge.push({
+        url: 'dataDetail.js',
+      })
+      setTimeout(() => {
+        debugUtil.log('发送体重详情标签')
+        detailChannel.postMessage({ key: 'weight' })
+      }, 2000)
     },
   },
 }

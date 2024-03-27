@@ -682,6 +682,41 @@ export default {
     }
   },
 
+  // 删除体重记录
+  async deleteScaleWeightHistory({ dispatch }, data) {
+    const param = {
+      type: '0x0F',
+      queryStrings: {
+        // 对应云端请求头param字段
+        proType: '0x0F',
+        handleType: 'delScaleWeightHistory',
+      },
+      transmitData: {
+        // 对应云端请求头data字段 --ps:云端的data字段是string 类型，js里的requestDataTransmit是json对象，由APP端转字符串并且加密后传给云端
+        //（注意key值不能是data字段）
+        historyId: data.historyId,
+      },
+    }
+
+    const res = await dispatch('requestDataTransmit', {
+      params: param,
+    })
+
+    if (res.isSuccess) {
+      debugUtil.log('删除后查询')
+      setTimeout(() => {
+        const nowTime = {
+          pageTime: getNowTime(),
+        }
+        debugUtil.log('查询时间', nowTime)
+        dispatch('queryScaleWeightHistoryList', nowTime)
+      }, 2000)
+      return res
+    } else {
+      this._vm.$bridge.showToast('删除记录失败', 1.5)
+    }
+  },
+
   // 查询体脂秤体重记录
   async queryScaleWeightHistoryList(
     { state, getters, commit, dispatch },

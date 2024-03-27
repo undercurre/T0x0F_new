@@ -10,37 +10,92 @@
       <div class="content" :style="{ minHeight: this.pageHeight }">
         <div class="content_wrap" v-if="dataList.length !== 0">
           <div class="data_list">
-            <DofCard class="card" v-for="(item,index) in dataList" :key="item.createTimeStr" :collapsable="true" :collapsed="index !== 0">
-                        <div class="title">
-                          <div class="title_col_1">
-                            <text class="title_date">{{ item.createTimeStr }}</text>
-                            <text class="title_weight">体重：{{ item.weight.toFixed(2) }}kg</text>
-                          </div>
-                          <div class="title_col_2">
-                            <image :src="upIcon" v-if="item.diff > 0" class="title_icon" />
-                            <image :src="downIcon" v-if="item.diff < 0" class="title_icon" />
-                            <text class="title_compare" v-if="item.diff" >{{ item.diff > 0 ? '+' : '-' }}{{ Math.abs(item.diff).toFixed(1) }}kg</text>
-                          </div>
-                        </div>
-                        <div slot="body">
-                          <dof-card-item>
-                            <div class="body">
-                              <text class="body_text">体脂率：{{ item.bodyFat }}%</text>
-                              <text class="body_text">BMI：{{ item.bmi }} kg/m²</text>
-                              <text class="body_text">身体年龄：{{ item.bodyAge }}</text>
-                              <text class="body_text">肌肉率：{{ item.muscle }}%</text>
-                              <text class="body_text">内脏脂肪率：{{ item.visceral }}%</text>
-                              <text class="body_text">皮下脂肪率：{{ item.subcutaneousIcon }}%</text>
-                              <text class="body_text">去脂体重：{{ item.fatFree }} kg</text>
-                              <text class="body_text">水分率：{{ item.water }}%</text>
-                              <text class="body_text">骨骼率：{{ item.bone === '— —' ? '— —' : (item.bone / item.weight * 100).toFixed(2) }}%</text>
-                              <text class="body_text">骨骼肌率：{{ item.boneMuscle }}%</text>
-                              <text class="body_text">蛋白质率：{{ item.protein }}%</text>
-                              <text class="body_text">基础消耗：{{ item.rate === '— —' ? '— —' : (item.rate * 1).toFixed(0) }}千卡</text>
-                              <text class="body_text" v-if="item.bodyFat !== '— —'">体型：{{ item.bodyType }}</text>
-                            </div>
-                          </dof-card-item>
-                        </div>
+            <DofCard
+              class="card"
+              v-for="(item, index) in dataList"
+              :key="item.createTimeStr"
+              :collapsable="true"
+              :collapsed="index !== 0"
+            >
+              <div class="title">
+                <div class="title_col_1">
+                  <text class="title_date">{{ item.createTimeStr }}</text>
+                  <text class="title_weight"
+                    >体重：{{ item.weight.toFixed(2) }}kg</text
+                  >
+                </div>
+                <div class="title_col_2">
+                  <image
+                    :src="upIcon"
+                    v-if="item.diff > 0"
+                    class="title_icon"
+                  />
+                  <image
+                    :src="downIcon"
+                    v-if="item.diff < 0"
+                    class="title_icon"
+                  />
+                  <text class="title_compare" v-if="item.diff"
+                    >{{ item.diff > 0 ? '+' : '-'
+                    }}{{ Math.abs(item.diff).toFixed(1) }}kg</text
+                  >
+                </div>
+              </div>
+              <div slot="body">
+                <dof-card-item>
+                  <div class="body">
+                    <text class="body_text">体脂率：{{ item.bodyFat }}%</text>
+                    <text class="body_text">BMI：{{ item.bmi }} kg/m²</text>
+                    <text class="body_text">身体年龄：{{ item.bodyAge }}</text>
+                    <text class="body_text">肌肉率：{{ item.muscle }}%</text>
+                    <text class="body_text"
+                      >内脏脂肪率：{{ item.visceral }}%</text
+                    >
+                    <text class="body_text"
+                      >皮下脂肪率：{{ item.subcutaneousIcon }}%</text
+                    >
+                    <text class="body_text"
+                      >去脂体重：{{ item.fatFree }} kg</text
+                    >
+                    <text class="body_text">水分率：{{ item.water }}%</text>
+                    <text class="body_text"
+                      >骨骼率：{{
+                        item.bone === '— —'
+                          ? '— —'
+                          : ((item.bone / item.weight) * 100).toFixed(2)
+                      }}%</text
+                    >
+                    <text class="body_text"
+                      >骨骼肌率：{{ item.boneMuscle }}%</text
+                    >
+                    <text class="body_text">蛋白质率：{{ item.protein }}%</text>
+                    <text class="body_text"
+                      >基础消耗：{{
+                        item.rate === '— —'
+                          ? '— —'
+                          : (item.rate * 1).toFixed(0)
+                      }}千卡</text
+                    >
+                    <text class="body_text" v-if="item.bodyFat !== '— —'"
+                      >体型：{{ item.bodyType }}</text
+                    >
+                  </div>
+                  <div
+                    style="
+                      width: 100%;
+                      align-items: center;
+                      margin-bottom: 20px;
+                    "
+                  >
+                    <dof-button
+                      type="red"
+                      text="删除记录"
+                      size="big"
+                      @dofButtonClicked="delHistory(item.historyId)"
+                    ></dof-button>
+                  </div>
+                </dof-card-item>
+              </div>
             </DofCard>
           </div>
         </div>
@@ -48,7 +103,7 @@
           <image :src="noRecord" class="lostData"></image>
           <text class="tip">暂无记录</text>
         </div>
-        <date-list v-if="dataList.length !== 0" class="date" @getRule="getRule"></date-list>
+        <date-list class="date" @getRule="getRule"></date-list>
       </div>
     </scroller>
     <dof-minibar
@@ -69,7 +124,7 @@
   </div>
 </template>
 <script>
-import { DofMinibar, DofCard, DofCardItem } from 'dolphin-weex-ui'
+import { DofMinibar, DofCard, DofCardItem, DofButton } from 'dolphin-weex-ui'
 import pageBase from '../../mixins/pageBase'
 import leftButton from '../../assets/image/header/back_black@2x.png'
 import personIcon from '../../assets/image/person.png'
@@ -91,6 +146,7 @@ export default {
     DateList,
     DofCard,
     DofCardItem,
+    DofButton,
   },
   mixins: [pageBase],
   data: () => ({
@@ -116,7 +172,11 @@ export default {
     ...mapGetters(['curMemberDetail']),
   },
   methods: {
-    ...mapActions(['getBaseInfo', 'queryScaleWeightHistoryList']),
+    ...mapActions([
+      'getBaseInfo',
+      'queryScaleWeightHistoryList',
+      'deleteScaleWeightHistory',
+    ]),
     onChange_01(e) {
       this.activeNames_01 = e.name
     },
@@ -173,6 +233,13 @@ export default {
       })
       debugUtil.log(this.dataList)
       this.$forceUpdate()
+    },
+
+    async delHistory(id) {
+      await this.deleteScaleWeightHistory({
+        historyId: id,
+      })
+      this.getDataList()
     },
   },
 }
