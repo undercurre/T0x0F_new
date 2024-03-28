@@ -6,6 +6,11 @@
     @viewappear="viewappear"
     @viewdisappear="viewdisappear"
   >
+    <div class="type-block" v-on:click="onTypeClick">
+      <text class="type-text">{{ typeText }}</text>
+      <image class="arrow" :src="arrowIcon"></image>
+    </div>
+
     <scroller :style="{ height: this.pageHeight }" @scroll="getScrollY">
       <div class="content" :style="{ minHeight: this.pageHeight }">
         <div class="content_wrap" v-if="dataList.length !== 0">
@@ -103,9 +108,18 @@
           <image :src="noRecord" class="lostData"></image>
           <text class="tip">暂无记录</text>
         </div>
-        <date-list class="date" @getRule="getRule"></date-list>
       </div>
     </scroller>
+    <popover-tab
+      ref="popover"
+      :buttons="popButtons"
+      :position="popoverPosition"
+      :arrowPosition="popoverArrowPosition"
+      :textStyle="popTextStyle"
+      coverColor="rgba(0, 0, 0, 0)"
+      @wxcPopoverButtonClicked="popoverButtonClicked"
+    >
+    </popover-tab>
     <dof-minibar
       class="minibar"
       :backgroundColor="scrollY < -200 ? '#fff' : 'transparent'"
@@ -130,9 +144,10 @@ import leftButton from '../../assets/image/header/back_black@2x.png'
 import personIcon from '../../assets/image/person.png'
 import editIcon from '../../assets/image/edit.png'
 import { reportDataset } from '../../config/report'
-import DateList from '../../components/DateList.vue'
+import popoverTab from '../../components/popoverTab.vue'
 import debugUtil from '../../util/debugUtil'
 import upIcon from '../../assets/image/up.png'
+import arrowIcon from '../../assets/image/arrow_down_grey.png'
 import downIcon from '../../assets/image/down.png'
 import { daotui } from '../../util/index'
 import { mapActions, mapGetters } from 'vuex'
@@ -143,10 +158,10 @@ import noRecord from '../../assets/image/noRecord.png'
 export default {
   components: {
     DofMinibar,
-    DateList,
     DofCard,
     DofCardItem,
     DofButton,
+    popoverTab,
   },
   mixins: [pageBase],
   data: () => ({
@@ -154,6 +169,7 @@ export default {
     upIcon,
     downIcon,
     leftButton,
+    arrowIcon,
     noRecord,
     editIcon,
     personIcon,
@@ -161,15 +177,52 @@ export default {
     reportDataset,
     endTime: '',
     dataList: [],
+    curType: 0,
+    popButtons: [
+      {
+        icon: '',
+        text: '近一周',
+        key: 'week',
+      },
+      {
+        icon: '',
+        text: '近一个月',
+        key: 'month',
+      },
+      {
+        icon: '',
+        text: '近一年',
+        key: 'year',
+      },
+    ],
+
+    popoverPosition: { x: 10, y: 254 },
+    popoverArrowPosition: { pos: 'top', x: -60 },
   }),
   async created() {
     await this.getBaseInfo()
     this.endTime = daotui(7)
     await this.getDataList()
   },
-  mounted() {},
+  mounted() {
+    this.$refs['popover'].setCurIndex('week')
+  },
   computed: {
     ...mapGetters(['curMemberDetail']),
+    popTextStyle() {
+      return {
+        'font-family': 'PingFangSC-Regular',
+        'font-size': '28px',
+        color: '#FFFFFF',
+        'font-weight': 400,
+      }
+    },
+    typeText() {
+      if (this.curType === 0) return '近一周'
+      else if (this.curType === 1) return '近一个月'
+      else if (this.curType === 2) return '近一年'
+      return ''
+    },
   },
   methods: {
     ...mapActions([
@@ -184,10 +237,11 @@ export default {
       this.scrollY = e.contentOffset.y
     },
     getRule(e) {
-      debugUtil.log('标尺改变', e)
-      if (e === 'week') this.endTime = daotui(7)
-      if (e === 'month') this.endTime = daotui(30)
-      if (e === 'year') this.endTime = daotui(365)
+      if (this.curType === e.index) return
+      this.curType = e.index
+      if (e.index === 'week') this.endTime = daotui(7)
+      if (e.index === 'month') this.endTime = daotui(30)
+      if (e.index === 'year') this.endTime = daotui(365)
       this.getDataList()
     },
     async getDataList() {
@@ -241,6 +295,10 @@ export default {
       })
       this.getDataList()
     },
+
+    onTypeClick() {
+      this.$refs['popover'].wxcPopoverShow()
+    },
   },
 }
 </script>
@@ -258,7 +316,7 @@ export default {
 }
 .content {
   background-color: #f9f9f9;
-  padding-top: 180px;
+  padding-top: 0px;
   justify-content: space-between;
   align-items: center;
   position: relative;
@@ -267,7 +325,7 @@ export default {
 .content_wrap {
   min-height: 500px;
   align-items: center;
-  padding-top: 84px;
+  padding-top: 0px;
 }
 
 .history {
@@ -367,5 +425,26 @@ export default {
   margin-top: 50px;
   width: 314px;
   height: 212px;
+}
+
+.type-block {
+  width: 200px;
+  height: 60px;
+  margin-top: 182px;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.type-text {
+  font-family: PingFangSC-Regular;
+  font-size: 32px;
+  color: #666666;
+  font-weight: 400;
+  margin-left: 44px;
+}
+.arrow {
+  width: 20px;
+  height: 12px;
+  margin-left: 10px;
 }
 </style>

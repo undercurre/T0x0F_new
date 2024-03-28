@@ -8,14 +8,21 @@
   >
     <scroller :style="{ height: this.pageHeight }" @scroll="getScrollY">
       <div class="content" :style="{ minHeight: this.pageHeight }">
-        <div class="content_wrap" v-if="isFinite(themeValue) && !isNaN(themeValue) && themeValue > 0">
+        <div
+          class="content_wrap"
+          v-if="isFinite(themeValue) && !isNaN(themeValue) && themeValue > 0"
+        >
           <div class="data">
             <div class="body_status">
               <text class="body_status_text"
                 >目标{{ pageTitle }}: {{ themeTarget }}{{ themeUnit }}</text
               >
             </div>
-            <Level :value="themeValue" :theme="themeKey" :unit="themeUnit"></Level>
+            <Level
+              :value="themeValue"
+              :theme="themeKey"
+              :unit="themeUnit"
+            ></Level>
             <div class="divider"></div>
             <Chart :theme="themeKey"></Chart>
           </div>
@@ -27,7 +34,10 @@
           ></Advice>
           <text class="define" v-if="themeDefine">{{ themeDefine }}</text>
         </div>
-        <div class="content_wrap" v-if="!(isFinite(themeValue) && !isNaN(themeValue) && themeValue > 0)">
+        <div
+          class="content_wrap"
+          v-if="!(isFinite(themeValue) && !isNaN(themeValue) && themeValue > 0)"
+        >
           <image :src="lostData" class="lostData"></image>
           <text class="tip">未测量到数据</text>
         </div>
@@ -163,6 +173,7 @@ export default {
     },
     themeValue() {
       const data = this.reportDataset.find(item => item.key === this.themeKey)
+      debugUtil.log('themeValue', this.newestRecord.weight, this.themeKey)
       if (data) {
         let curValue = data.algo(
           this.curMemberDetail.birthday,
