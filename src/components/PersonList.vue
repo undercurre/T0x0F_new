@@ -128,7 +128,8 @@ export default {
         key: 'ADD',
       })
       this.popButtons = result
-      this.$refs['popover'].setCurIndex(this.selected)
+      if (this.$refs['popover'])
+        this.$refs['popover'].setCurIndex(this.selected)
     },
   },
   watch: {

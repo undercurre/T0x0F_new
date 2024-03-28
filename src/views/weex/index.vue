@@ -425,7 +425,6 @@ export default {
     ]),
 
     onrefresh() {
-      console.log('is refreshing')
       this.refreshing = true
       setTimeout(() => {
         this.refreshing = false

@@ -6,7 +6,11 @@
     @viewappear="viewappear"
     @viewdisappear="viewdisappear"
   >
-    <scroller :style="{ height: this.pageHeight }" @scroll="getScrollY">
+    <scroller
+      :style="{ height: this.pageHeight }"
+      @scroll="getScrollY"
+      v-if="isRefreshed"
+    >
       <div class="content" :style="{ minHeight: this.pageHeight }">
         <div
           class="content_wrap"
@@ -105,7 +109,9 @@ export default {
   },
   mixins: [pageBase],
   data: () => ({
+    isRefreshed: true,
     themeKey: '',
+    themeOld: '',
     tabCheckIndex: 0,
     scrollY: 0,
     leftButton,
@@ -120,6 +126,15 @@ export default {
     reportDataset,
     tabTop: 0,
   }),
+  async viewappear() {
+    this.init()
+    this.isRefreshed = true
+    if (this.themeOld) this.themeKey = this.themeOld
+  },
+  async viewdisappear() {
+    this.isRefreshed = false
+    this.themeOld = this.themeKey
+  },
   async created() {
     this.navTabTitles = this.navTabTitles.concat(
       this.reportDataset.map(item => {

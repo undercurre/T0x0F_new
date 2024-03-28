@@ -18,6 +18,7 @@ export default {
     return state.deviceInfo.deviceName || ''
   },
   curAdmin(state) {
+    debugUtil.log('curAdmin')
     const curAdmin = state.memberList.find(item => {
       return item.isDefault === '1' && item.userId === state.userInfo.uid
     })
@@ -28,6 +29,7 @@ export default {
         }
   },
   curMemberDetail(state) {
+    debugUtil.log('curMemberDetail')
     const curMember = state.memberList.find(item => {
       return item.scaleUserId === state.curMember
     })
@@ -65,6 +67,7 @@ export default {
     return curMember ? curMember : curAdmin
   },
   newestRecord(state) {
+    debugUtil.log('newestRecord')
     if (state.recordList.length > 0) {
       return state.recordList[0]
     } else {
@@ -75,6 +78,7 @@ export default {
     }
   },
   lastRecord(state) {
+    debugUtil.log('lastRecord')
     if (state.recordList.length > 1) {
       return state.recordList[1]
     } else {

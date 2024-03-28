@@ -16,20 +16,19 @@ export default {
     if (state.deviceInfo.isOnline === '0') {
       return
     }
-
     await Promise.all([dispatch('updateUserInfo'), dispatch('updateHomeInfo')])
   },
   async getBaseInfo({ state, dispatch, commit, getters }) {
-    await dispatch('updateDeviceInfo')
-    debugUtil.log('getBaseInfo-获取设备信息', state.deviceInfo)
-    await dispatch('init')
-    debugUtil.log('getBaseInfo-获取到成员信息', state.userInfo)
-    const initRes = await dispatch('initScaleUser')
-    debugUtil.log('getBaseInfo-初始化成员', initRes)
-    const query = await dispatch('queryScaleUserList')
-    debugUtil.log('getBaseInfo-查询成员', query)
-    debugUtil.log('getBaseInfo-当前主人', getters.curAdmin)
     try {
+      await dispatch('updateDeviceInfo')
+      debugUtil.log('getBaseInfo-获取设备信息', state.deviceInfo)
+      await dispatch('init')
+      debugUtil.log('getBaseInfo-获取到成员信息', state.userInfo)
+      const initRes = await dispatch('initScaleUser')
+      debugUtil.log('getBaseInfo-初始化成员', initRes)
+      const query = await dispatch('queryScaleUserList')
+      debugUtil.log('getBaseInfo-查询成员', query)
+      debugUtil.log('getBaseInfo-当前主人', getters.curAdmin)
       const res = await this._vm.$storage.getStorage(
         `${getters.curAdmin.userId}_selected`
       )

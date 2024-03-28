@@ -53,6 +53,8 @@ export default {
   },
   methods: {
     calData() {
+      if (!(this.curMemberDetail && this.newestRecord && this.lastRecord))
+        return
       this.reportDataset.forEach(async item => {
         let curValue = await item.algo(
           this.curMemberDetail.birthday,
