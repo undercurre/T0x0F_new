@@ -302,6 +302,10 @@ export default {
               debugUtil.log('采集到稳定的体重数据', parseData)
               this.uploadData.weight = parseData.measurement.weight
             }
+            if (parseData.measurement.isOverloaded) {
+              debugUtil.log('采集到超重的体重数据', parseData)
+              this.$bridge.showToast('超载！超载！', 5000)
+            }
           } else {
             // 阻抗数据
             // TODO: 假的体脂数据
@@ -341,9 +345,10 @@ export default {
             }
             if (this.impedanceMeasurement.mode.impedanceStatus === 3) {
               this.uploadData.impedance = 0
-              uploadOnce()
               // 没有脱鞋
-
+              setTimeout(() => {
+                uploadOnce()
+              }, 3000)
               badImpedanceTip()
             }
             if (this.impedanceMeasurement.mode.impedanceStatus === 1) {
