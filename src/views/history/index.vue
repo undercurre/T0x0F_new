@@ -93,7 +93,7 @@
                     "
                   >
                     <dof-button
-                      type="red"
+                      type="tomato"
                       text="删除记录"
                       size="big"
                       @dofButtonClicked="delHistory(item.historyId)"

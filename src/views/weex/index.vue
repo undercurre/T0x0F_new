@@ -220,6 +220,7 @@ export default {
     }
   },
   mounted() {
+    this.$bridge.showToast('请赤脚站在体重秤上', 1500)
     // 节流提示
     const badImpedanceTip = throttle(() => {
       this.$toast('请赤脚站立在秤上', 3)
@@ -278,7 +279,7 @@ export default {
         if (res.messageBody.id === this.deviceInfo.productId) {
           // (用于连接状态蛋)
           if (!this.isConnect) {
-            this.$bridge.showToast('请赤脚站在体重秤上', 5000)
+            // this.$bridge.showToast('请赤脚站在体重秤上', 5000)
           }
           this.isConnect = true
           clearTimeout(this.isConnectTimer)
