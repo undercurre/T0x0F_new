@@ -94,6 +94,7 @@
                   >
                     <dof-button
                       type="tomato"
+                      pattern="plain"
                       text="删除记录"
                       size="big"
                       @dofButtonClicked="delHistory(item.historyId)"
@@ -242,6 +243,14 @@ export default {
       if (e.index === 'week') this.endTime = daotui(7)
       if (e.index === 'month') this.endTime = daotui(30)
       if (e.index === 'year') this.endTime = daotui(365)
+      this.getDataList()
+    },
+    popoverButtonClicked(e) {
+      if (this.curType === e.index) return
+      this.curType = e.index
+      if (e.key === 'week') this.endTime = daotui(7)
+      if (e.key === 'month') this.endTime = daotui(30)
+      if (e.key === 'year') this.endTime = daotui(365)
       this.getDataList()
     },
     async getDataList() {

@@ -585,6 +585,8 @@ export default {
       })
     },
     offBack(e) {
+      // 选择人物后
+      this.viewappear()
       this.offSelector = e
       if (this.offSelector) this.unAble2Scroll = true
     },
