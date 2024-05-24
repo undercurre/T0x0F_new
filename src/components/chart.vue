@@ -162,7 +162,12 @@ export default {
             curValue = ((curValue / dataList[i].weight) * 100).toFixed(2)
           }
         }
-        const yVal = parseInt(curValue) > 0 ? parseInt(curValue) : 0
+        const yVal =
+          parseInt(curValue) > 0
+            ? this.theme === 'weight'
+              ? curValue
+              : parseInt(curValue)
+            : 0
         config.y[0].value.push(yVal)
         config.y[0].label.push(parseFloat(yVal).toString())
       }

@@ -17,7 +17,7 @@ const chartConfig = {
       lineSidesPointColor: '#000000', //端点颜色，lineSidesPointAble为ture有效
       lineDashAble: false, //曲线的类型可调: 是否使用虚线，默认false
       lineWidth: 2, //折线曲线线宽  默认为1 ，最大不能超过10，5.12 增加
-      labelSize: 9, //折线或者曲线上文字颜色
+      labelSize: 12, //折线或者曲线上文字颜色
       labelColor: '#000000', //折线或者曲线上文字大小
 
       isDrawCircles: true, //是否绘制圆圈  （5.12）
@@ -39,8 +39,8 @@ const chartConfig = {
 
       //点中高亮的设置
       isDrawHighLightCircles: true, //是否启动 点击高亮 （5.12）
-      highLightCircleRadius: 8, // 高亮的圆圈半径设置（5.12）
-      highLightCircleHoleRadius: 6, // 高亮的圆内半径设置（5.12）
+      highLightCircleRadius: 6, // 高亮的圆圈半径设置（5.12）
+      highLightCircleHoleRadius: 4, // 高亮的圆内半径设置（5.12）
       highLightCircleOutsideWidth: 2, // 高亮的圆外宽度设置（5.12）
       highLightCircleColor: '#3a7df6', // 高亮的圆圈颜色（5.12）
       highLightCircleHoleColor: '#ffffff', // 高亮的圆内颜色（5.12）
@@ -128,7 +128,7 @@ const chartConfig = {
   extraLineSegColor: '#FF8225', //虚线对应线段颜色(8.8)
 
   marker: {
-    markerShow: true, //默认为false,不显示maker
+    markerShow: false, //默认为false,不显示maker
     markerColor: '#000000', //默认为黑色，marker的背景色，一定要六位
     markerTextColor: '#ffffff', //默认白色，marker字体字颜色
     markerTextSize: '12', //默认12

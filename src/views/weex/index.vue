@@ -228,6 +228,7 @@ export default {
     const uploadOnce = throttle(async () => {
       if (!this.isView) return
       if (this.uploadData.weight === 0) return
+      debugUtil.log('超常规对比', this.newestRecord)
       if (
         Math.abs(this.uploadData.weight - this.newestRecord.weight) > 5 &&
         this.newestRecord &&
@@ -261,6 +262,12 @@ export default {
         console.log('保存记录')
         if (res.isSuccess) {
           this.$toast('记录保存成功')
+          debugUtil.log('保存后的成员信息检索', this.curMemberDetail)
+          if (this.curMemberDetail && !this.curMemberDetail.height) {
+            setTimeout(() => {
+              this.$toast('计算各项指标数据需要填写成员信息', 3000)
+            }, 2000)
+          }
           this.getNewData()
           this.uploadData.weight = 0
           this.uploadData.impedance = 0

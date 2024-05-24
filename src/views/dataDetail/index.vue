@@ -257,7 +257,7 @@ export default {
           best = ((best / bestWeight) * 100).toFixed(2)
         }
       }
-      return best
+      return isNaN(best) ? '— —(请填写成员信息)' : best
     },
   },
   methods: {

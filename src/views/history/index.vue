@@ -299,10 +299,29 @@ export default {
     },
 
     async delHistory(id) {
-      await this.deleteScaleWeightHistory({
-        historyId: id,
-      })
-      this.getDataList()
+      const params = {
+        title: '删除记录',
+        content: '是否确认删除该记录？',
+        args: [
+          {
+            confirmText: '否',
+            index: 10,
+          },
+          {
+            confirmText: '是',
+            index: 11,
+          },
+        ],
+      }
+      const res = await this.$bridge.showConfirmView(params)
+      if (res.index === 10) {
+        return
+      } else {
+        await this.deleteScaleWeightHistory({
+          historyId: id,
+        })
+        this.getDataList()
+      }
     },
 
     onTypeClick() {

@@ -7,7 +7,7 @@
         <image :src="upIcon" v-if="updown && !equal" class="icon" />
         <image :src="downIcon" v-if="!updown && !equal" class="icon" />
         <text class="title_compare" v-if="diff"
-          >{{ diff > 0 ? '+' : '-' }}{{ Math.abs(diff).toFixed(1)
+          >{{ diff > 0 ? '+' : '-' }}{{ Math.abs(diff).toFixed(2)
           }}{{ unit }}</text
         >
       </div>
@@ -198,7 +198,7 @@ export default {
   width: 48px;
   height: 48px;
   margin-bottom: 8px;
-  margin-left: 29px;
+  margin-left: 20px;
 }
 
 .date {
