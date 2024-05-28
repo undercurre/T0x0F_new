@@ -265,7 +265,7 @@ export default {
           debugUtil.log('保存后的成员信息检索', this.curMemberDetail)
           if (this.curMemberDetail && !this.curMemberDetail.height) {
             setTimeout(() => {
-              this.$toast('计算各项指标数据需要填写成员信息', 3000)
+              this.$toast('请完成成员信息后称重', 3)
             }, 2000)
           }
           this.getNewData()
@@ -341,6 +341,9 @@ export default {
             //   checksum: 135,
             // }
             debugUtil.log('阻抗数据', this.impedanceMeasurement)
+            if (this.uploadData.weight <= 5) {
+              return
+            }
             // 采集正常的阻抗数据
             if (
               this.impedanceMeasurement.measurement.measurementStatus &&

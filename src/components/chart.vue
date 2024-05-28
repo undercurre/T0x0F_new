@@ -121,7 +121,7 @@ export default {
         curMaxValue = maxWeight
         curMinValue = minWeight
       } else {
-        curMaxValue = parseInt(
+        curMaxValue = Number(
           reportItem.algo(
             this.curMemberDetail.birthday,
             this.curMemberDetail.height,
@@ -129,8 +129,8 @@ export default {
             maxImpedance,
             this.curMemberDetail.sex === '1' ? 'female' : 'male'
           )
-        )
-        curMinValue = parseInt(
+        ).toFixed(2)
+        curMinValue = Number(
           reportItem.algo(
             this.curMemberDetail.birthday,
             this.curMemberDetail.height,
@@ -138,7 +138,7 @@ export default {
             minImpedance,
             this.curMemberDetail.sex === '1' ? 'female' : 'male'
           )
-        )
+        ).toFixed(2)
       }
       this.maxData = curMaxValue > 0 ? curMaxValue : 0
       this.minData = curMinValue > 0 ? curMinValue : 0
@@ -166,11 +166,19 @@ export default {
           parseInt(curValue) > 0
             ? this.theme === 'weight'
               ? curValue
-              : parseInt(curValue)
+              : Number(curValue).toFixed(2)
             : 0
         config.y[0].value.push(yVal)
         config.y[0].label.push(parseFloat(yVal).toString())
       }
+
+      curMaxValue = Math.max(...config.y[0].value)
+      debugUtil.log('最大值新的', curMaxValue)
+      curMinValue = Math.min(...config.y[0].value)
+      debugUtil.log('最小值新的', curMinValue)
+
+      this.maxData = curMaxValue > 0 ? curMaxValue : 0
+      this.minData = curMinValue > 0 ? curMinValue : 0
 
       if (!isFinite(this.maxData)) this.maxData = 0
       if (!isFinite(this.minData)) this.minData = 0
