@@ -40,7 +40,10 @@
                     v-if="item.diff < 0"
                     class="title_icon"
                   />
-                  <text class="title_compare" v-if="item.diff"
+                  <text
+                    :style="{ color: item.diff > 0 ? '#ff3b30' : '#3CB371' }"
+                    class="title_compare"
+                    v-if="item.diff"
                     >{{ item.diff > 0 ? '+' : '-'
                     }}{{ Math.abs(item.diff).toFixed(1) }}kg</text
                   >

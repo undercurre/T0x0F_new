@@ -15,20 +15,22 @@
     >
       <div class="u-popover-arrow" :style="arrowStyle"></div>
       <div class="u-popover-inner">
-        <div
-          :class="['i-btn', i === buttons.length - 1 ? 'i-btn-noborder' : '']"
-          v-for="(item, i) in buttons"
-          :key="i"
-          @click="wxcButtonClicked(i, item.key)"
-        >
-          <image :src="item.icon" v-if="item.icon" class="btn-icon"></image>
-          <text class="btn-text" :style="textStyle">{{ item.text }}</text>
-          <image
-            :src="checkIcon"
-            v-if="item.key === curIndex && item.key !== 'ADD'"
-            class="check-icon"
-          ></image>
-        </div>
+        <scroller :style="{ height: '800px' }">
+          <div
+            :class="['i-btn', i === buttons.length - 1 ? 'i-btn-noborder' : '']"
+            v-for="(item, i) in buttons"
+            :key="i"
+            @click="wxcButtonClicked(i, item.key)"
+          >
+            <image :src="item.icon" v-if="item.icon" class="btn-icon"></image>
+            <text class="btn-text" :style="textStyle">{{ item.text }}</text>
+            <image
+              :src="checkIcon"
+              v-if="item.key === curIndex && item.key !== 'ADD'"
+              class="check-icon"
+            ></image>
+          </div>
+        </scroller>
       </div>
     </div>
   </div>

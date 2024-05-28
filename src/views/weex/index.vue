@@ -265,7 +265,7 @@ export default {
           debugUtil.log('保存后的成员信息检索', this.curMemberDetail)
           if (this.curMemberDetail && !this.curMemberDetail.height) {
             setTimeout(() => {
-              this.$toast('请完成成员信息后称重', 3)
+              this.$toast('请完成成员信息后称重', 5)
             }, 2000)
           }
           this.getNewData()
