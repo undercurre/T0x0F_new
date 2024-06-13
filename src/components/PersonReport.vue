@@ -103,7 +103,14 @@ export default {
         if (curValue === lastValue) item.updown = 'equal'
         if (curValue > lastValue) item.updown = 'up'
         if (curValue < lastValue) item.updown = 'down'
-        if (lastValue < 0) item.updown = 'equal'
+        if (
+          lastValue < 0 ||
+          (this.lastRecord.impedance === 0 &&
+            (item.key === 'fatFree' ||
+              item.key === 'visceral' ||
+              item.key === 'bone'))
+        )
+          item.updown = 'equal'
         this.$set(item, 'updown', item.updown)
         debugUtil.log('是否相等', item.key, curValue, lastValue, item.updown)
         if (isFinite(curValue) && !isNaN(curValue) && curValue > 0) {
