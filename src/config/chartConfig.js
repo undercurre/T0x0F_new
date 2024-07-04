@@ -162,9 +162,9 @@ const chartConfig = {
 
   isShowOutsidePart: false, //是否显示超出坐标区域的部分（8.7.0）
 
-  visibleXRangeMaximum: 0, //x轴最大可视数据数量。当数据数量>最大可视数据数量时且dragType为x可滚动时（为0或2时）才可以左右滚动 （8.15.0）
+  visibleXRangeMaximum: 7, //x轴最大可视数据数量。当数据数量>最大可视数据数量时且dragType为x可滚动时（为0或2时）才可以左右滚动 （8.15.0）
   scaleType: 1, //0-x,y都可以缩放，1-x,y都不可缩放，2-只有x可缩放，3-只有y可缩放。 默认是1（8.15.0）
-  dragType: 1, //0-x,y都可以拖拽，1-x,y都不可拖拽，2-只有x可拖拽，3-只有y可拖拽. 默认是0（8.15.0）
+  dragType: 2, //0-x,y都可以拖拽，1-x,y都不可拖拽，2-只有x可拖拽，3-只有y可拖拽. 默认是0（8.15.0）
 
   inverseSelect: false, //android专用。设置点击高亮是否反选。如果为true,高亮时点击则取消高亮，否则显示高亮。true-反选，false-不返选。默认效果是不反选(仅android 8.15.0，暂不公开)
 }

@@ -11,7 +11,12 @@
       <image class="arrow" :src="arrowIcon"></image>
     </div>
 
-    <scroller :style="{ height: this.pageHeight }" @scroll="getScrollY">
+    <scroller
+      :style="{ height: this.pageHeight }"
+      loadmoreoffset="100"
+      @scroll="getScrollY"
+      @loadmore="loadmore"
+    >
       <div class="content" :style="{ minHeight: this.pageHeight }">
         <div class="content_wrap" v-if="dataList.length !== 0">
           <div class="data_list">
@@ -112,6 +117,7 @@
           <image :src="noRecord" class="lostData"></image>
           <text class="tip">暂无记录</text>
         </div>
+        <div v-if="isIos" style="height: 300px"></div>
       </div>
     </scroller>
     <popover-tab
@@ -155,7 +161,7 @@ import arrowIcon from '../../assets/image/arrow_down_grey.png'
 import downIcon from '../../assets/image/down.png'
 import { daotui } from '../../util/index'
 import { mapActions, mapGetters } from 'vuex'
-import { getNowDate, getNowTime } from '../../util'
+import { getNowDate } from '../../util'
 import { calBodyType } from '../../util/algo'
 import noRecord from '../../assets/image/noRecord.png'
 
@@ -179,6 +185,7 @@ export default {
     personIcon,
     activeNames_01: [1],
     reportDataset,
+    pageTime: '',
     endTime: '',
     dataList: [],
     curType: 0,
@@ -207,6 +214,7 @@ export default {
     await this.getBaseInfo()
     this.endTime = daotui(7)
     await this.getDataList()
+    debugUtil.log('当前平台', weex.config.env.platform)
   },
   mounted() {
     this.$refs['popover'].setCurIndex('week')
@@ -254,17 +262,23 @@ export default {
       if (e.key === 'week') this.endTime = daotui(7)
       if (e.key === 'month') this.endTime = daotui(30)
       if (e.key === 'year') this.endTime = daotui(365)
+      this.pageTime = ''
       this.getDataList()
     },
     async getDataList() {
       const time = {
-        pageTime: getNowTime(),
+        pageTime: this.pageTime,
         startTime: this.endTime,
         endTime: getNowDate(),
       }
       const record = await this.queryScaleWeightHistoryList(time)
-      this.dataList = record.returnData.result.scaleWeightHistoryList
-      this.dataList.forEach((item, index, array) => {
+      if (record.returnData.result.scaleWeightHistoryList.length === 0) return
+      this.pageTime =
+        record.returnData.result.scaleWeightHistoryList[
+          record.returnData.result.scaleWeightHistoryList.length - 1
+        ].createTimeStr
+      const tempData = record.returnData.result.scaleWeightHistoryList
+      tempData.forEach((item, index, array) => {
         this.reportDataset.forEach(report => {
           if (index < array.length - 1) {
             item.diff = item.weight - array[index + 1].weight
@@ -296,11 +310,16 @@ export default {
           this.curMemberDetail.birthday,
           this.curMemberDetail.sex
         ).name
+
+        this.dataList.push(item)
       })
       debugUtil.log(this.dataList)
       this.$forceUpdate()
     },
-
+    loadmore() {
+      debugUtil.log('触发loadmore')
+      this.getDataList()
+    },
     async delHistory(id) {
       const params = {
         title: '删除记录',

@@ -753,7 +753,7 @@ export default {
   },
 
   // 查询体脂秤体重记录统计
-  async queryScaleWeightByTimes({ state, getters, dispatch }, dateType) {
+  async queryScaleWeightByTimes({ state, getters, dispatch }, data) {
     const param = {
       type: '0x0F',
       queryStrings: {
@@ -766,7 +766,9 @@ export default {
         //（注意key值不能是data字段）
         deviceId: state.deviceInfo.mac.toUpperCase(),
         scaleUserId: getters.curMemberDetail.scaleUserId,
-        dateType,
+        dateType: data.dateType,
+        startTime: data.startTime,
+        endTime: data.endTime,
       },
     }
 

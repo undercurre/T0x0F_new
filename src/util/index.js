@@ -264,8 +264,7 @@ export function daotui(dayCount) {
   return oneWeekAgoString
 }
 
-export function getCurrentWeekRange() {
-  const date = new Date() // 将日期字符串转换为 Date 对象
+export function getCurrentWeekRange(date) {
   const dayOfWeek = date.getDay() // 获取该日期的星期几（0-6，0表示星期日）
 
   // 根据星期几计算该日期所在周的第一天和最后一天的日期
@@ -274,54 +273,58 @@ export function getCurrentWeekRange() {
   ) // 将时间调整到本周第一天
   const lastDayOfWeek = new Date(firstDayOfWeek.getTime() + 6 * 86400000) // 将时间调整到本周最后一天
 
-  // 格式化日期字符串
-  const firstDayStr = formatDate(firstDayOfWeek)
-  const lastDayStr = formatDate2(lastDayOfWeek)
-  const firstDayStr2 = formatDate3(firstDayOfWeek) // 格式化第一天的日期字符串
-  const lastDayStr2 = formatDate3(lastDayOfWeek) // 格式化最后一天的日期字符串
+  // // 格式化日期字符串
+  // const firstDayStr = formatDate(firstDayOfWeek)
+  // const lastDayStr = formatDate2(lastDayOfWeek)
+  // const firstDayStr2 = formatDate3(firstDayOfWeek) // 格式化第一天的日期字符串
+  // const lastDayStr2 = formatDate3(lastDayOfWeek) // 格式化最后一天的日期字符串
 
-  return [firstDayStr, lastDayStr, firstDayStr2, lastDayStr2] // 返回日期范围
+  // return [firstDayStr, lastDayStr, firstDayStr2, lastDayStr2] // 返回日期范围
+
+  return [firstDayOfWeek, lastDayOfWeek]
 }
 
-export function getCurrentMonthRange() {
-  const now = new Date() // 获取当前日期
+export function getCurrentMonthRange(now) {
   const year = now.getFullYear() // 获取年份
   const month = now.getMonth() + 1 // 获取月份（注意：月份是从0开始计数的，所以需要加1）
 
   const firstDayOfMonth = new Date(year, month - 1, 1) // 当前月份的第一天
   const lastDayOfMonth = new Date(year, month, 0) // 当前月份的最后一天
 
-  const firstDayStr = formatDate(firstDayOfMonth) // 格式化第一天的日期字符串
-  const lastDayStr = formatDate2(lastDayOfMonth) // 格式化最后一天的日期字符串
-  const firstDayStr2 = formatDate3(firstDayOfMonth) // 格式化第一天的日期字符串
-  const lastDayStr2 = formatDate3(lastDayOfMonth) // 格式化最后一天的日期字符串
+  // const firstDayStr = formatDate(firstDayOfMonth) // 格式化第一天的日期字符串
+  // const lastDayStr = formatDate2(lastDayOfMonth) // 格式化最后一天的日期字符串
+  // const firstDayStr2 = formatDate3(firstDayOfMonth) // 格式化第一天的日期字符串
+  // const lastDayStr2 = formatDate3(lastDayOfMonth) // 格式化最后一天的日期字符串
 
-  return [firstDayStr, lastDayStr, firstDayStr2, lastDayStr2] // 返回日期范围
+  // return [firstDayStr, lastDayStr, firstDayStr2, lastDayStr2] // 返回日期范围
+
+  return [firstDayOfMonth, lastDayOfMonth]
 }
 
-export function getCurrentYearRange() {
-  const now = new Date() // 获取当前日期
+export function getCurrentYearRange(now) {
   const year = now.getFullYear() // 获取年份
 
   const firstDayOfYear = new Date(year, 0, 1) // 当前年份的第一天
   const lastDayOfYear = new Date(year, 11, 31) // 当前年份的最后一天
 
-  const firstDayStr = formatDate(firstDayOfYear) // 格式化第一天的日期字符串
-  const lastDayStr = formatDate2(lastDayOfYear) // 格式化最后一天的日期字符串
-  const firstDayStr2 = formatDate3(firstDayOfYear) // 格式化第一天的日期字符串
-  const lastDayStr2 = formatDate3(lastDayOfYear) // 格式化最后一天的日期字符串
+  // const firstDayStr = formatDate(firstDayOfYear) // 格式化第一天的日期字符串
+  // const lastDayStr = formatDate2(lastDayOfYear) // 格式化最后一天的日期字符串
+  // const firstDayStr2 = formatDate3(firstDayOfYear) // 格式化第一天的日期字符串
+  // const lastDayStr2 = formatDate3(lastDayOfYear) // 格式化最后一天的日期字符串
 
-  return [firstDayStr, lastDayStr, firstDayStr2, lastDayStr2] // 返回日期范围
+  // return [firstDayStr, lastDayStr, firstDayStr2, lastDayStr2] // 返回日期范围
+
+  return [firstDayOfYear, lastDayOfYear]
 }
 
-function formatDate(date) {
+export function formatDate(date) {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const day = date.getDate()
   return `${year}年${month}月${day}日`
 }
 
-function formatDate2(date) {
+export function formatDate2(date) {
   const month = date.getMonth() + 1
   const day = date.getDate()
   return `${month}月${day}日`

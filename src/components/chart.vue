@@ -21,7 +21,16 @@
         ></midea-linechart-view>
       </div>
     </div>
-    <text class="date_text">{{ dateRange }}</text>
+
+    <div class="date_box">
+      <div class="arrow_box" @click="preDate">
+        <image class="btn-l" :src="arrowLeft"></image>
+      </div>
+      <text class="date_text">{{ dateRange }}</text>
+      <div class="arrow_box" @click="pushDate">
+        <image class="btn-r" :src="arrowRight"></image>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -33,8 +42,12 @@ import {
   getCurrentWeekRange,
   getCurrentMonthRange,
   getCurrentYearRange,
+  formatDate,
+  formatDate2,
 } from '../util'
 import debugUtil from '../util/debugUtil'
+import arrowLeft from '../assets/image/arrow-left.png'
+import arrowRight from '../assets/image/arrow-right.png'
 
 export default {
   props: {
@@ -65,6 +78,9 @@ export default {
       },
     ],
     unit: '',
+    arrowLeft,
+    arrowRight,
+    curDate: new Date(),
   }),
   async created() {
     await this.getBaseInfo()
@@ -76,13 +92,13 @@ export default {
     dateRange() {
       let res
       if (this.dateType === 'WEEK') {
-        res = getCurrentWeekRange()
+        res = getCurrentWeekRange(this.curDate)
       } else if (this.dateType === 'MONTH') {
-        res = getCurrentMonthRange()
+        res = getCurrentMonthRange(this.curDate)
       } else {
-        res = getCurrentYearRange()
+        res = getCurrentYearRange(this.curDate)
       }
-      return `${res[0]}-${res[1]}`
+      return `${formatDate(res[0])}-${formatDate2(res[1])}`
     },
   },
   watch: {
@@ -108,6 +124,7 @@ export default {
       // 获取数据
       const resData = await this.getData(this.dateType)
       const dataList = resData.returnData.result.scaleWeightByTimesList
+      debugUtil.log('数据长度', dataList.length)
       const maxWeight = resData.returnData.result.maxMinValue.weightMaxValue
       const minWeight = resData.returnData.result.maxMinValue.weightMinValue
       const maxImpedance =
@@ -224,7 +241,19 @@ export default {
       this.isLoaded = true
     },
     async getData(type) {
-      const res = await this.queryScaleWeightByTimes(type)
+      let dateArr
+      if (this.dateType === 'WEEK') {
+        dateArr = getCurrentWeekRange(this.curDate)
+      } else if (this.dateType === 'MONTH') {
+        dateArr = getCurrentMonthRange(this.curDate)
+      } else {
+        dateArr = getCurrentYearRange(this.curDate)
+      }
+      const res = await this.queryScaleWeightByTimes({
+        dateType: type,
+        startTime: dateArr[0].getTime(),
+        endTime: dateArr[1].getTime(),
+      })
       if (res.isSuccess) {
         return res
       }
@@ -318,6 +347,110 @@ export default {
       }
       return ''
     },
+    preDate() {
+      if (this.dateType === 'WEEK') {
+        // 获取当前日期
+        const currentDate = new Date(this.curDate)
+
+        // 获取当前日期的时间戳（毫秒）
+        const currentTime = currentDate.getTime()
+
+        // 计算7天前的时间戳（7天 * 24小时 * 60分钟 * 60秒 * 1000毫秒）
+        const sevenDaysAgoTime = currentTime - 7 * 24 * 60 * 60 * 1000
+
+        // 创建一个新的Date对象，表示7天前的日期
+        const sevenDaysAgoDate = new Date(sevenDaysAgoTime)
+
+        this.curDate = sevenDaysAgoDate
+      } else if (this.dateType === 'MONTH') {
+        // 获取当前日期
+        const currentDate = new Date(this.curDate)
+
+        // 保存当前日期的日期部分
+        const currentDay = currentDate.getDate()
+
+        // 设置月份为前一个月
+        currentDate.setMonth(currentDate.getMonth() - 1)
+
+        // 如果当前日期的日期部分与新日期的日期部分不相同，说明跨月了，需要手动调整
+        if (currentDate.getDate() < currentDay) {
+          currentDate.setDate(0) // 设置为上一个月的最后一天
+        }
+
+        this.curDate = new Date(currentDate)
+      } else {
+        // 获取当前日期
+        const currentDate = new Date(this.curDate)
+
+        // 使用 setFullYear 方法将年份减1
+        currentDate.setFullYear(currentDate.getFullYear() - 1)
+
+        this.curDate = new Date(currentDate)
+      }
+
+      this.calData()
+    },
+    pushDate() {
+      const now = new Date()
+      const nowTime = now.getTime()
+      if (this.dateType === 'WEEK') {
+        // 获取当前日期
+        const currentDate = new Date(this.curDate)
+
+        // 获取当前日期的时间戳（毫秒）
+        const currentTime = currentDate.getTime()
+
+        // 计算7天后的时间戳（7天 * 24小时 * 60分钟 * 60秒 * 1000毫秒）
+        const sevenDaysAgoTime = currentTime + 7 * 24 * 60 * 60 * 1000
+
+        // 创建一个新的Date对象，表示7天前的日期
+        const sevenDaysAgoDate = new Date(sevenDaysAgoTime)
+
+        const dayOfWeek = now.getDay() // 获取该日期的星期几（0-6，0表示星期日）
+
+        // 根据星期几计算该日期所在周的第一天和最后一天的日期
+        const firstDayOfWeek = new Date(
+          nowTime - ((dayOfWeek + 6) % 7) * 86400000
+        ) // 将时间调整到本周第一天
+        const lastDayOfWeek = new Date(firstDayOfWeek.getTime() + 6 * 86400000) // 将时间调整到本周最后一天
+
+        if (sevenDaysAgoDate.getTime() > lastDayOfWeek.getTime()) {
+          this.$bridge.showToast('已经是最新的一周')
+          return
+        }
+        this.curDate = sevenDaysAgoDate
+      } else if (this.dateType === 'MONTH') {
+        // 获取当前日期
+        const currentDate = new Date(this.curDate)
+
+        // 设置月份为后一个月
+        currentDate.setMonth(currentDate.getMonth() + 1)
+        currentDate.setDate(1)
+
+        if (currentDate.getTime() > nowTime) {
+          this.$bridge.showToast('已经是最新的一月')
+          return
+        }
+
+        this.curDate = new Date(currentDate)
+      } else {
+        // 获取当前日期
+        const currentDate = new Date(this.curDate)
+
+        // 使用 setFullYear 方法将年份加1
+        currentDate.setFullYear(currentDate.getFullYear() + 1)
+        currentDate.setDate(1)
+
+        if (currentDate.getTime() > nowTime) {
+          this.$bridge.showToast('已经是最新的一年')
+          return
+        }
+
+        this.curDate = new Date(currentDate)
+      }
+
+      this.calData()
+    },
   },
 }
 </script>
@@ -353,7 +486,6 @@ export default {
   letter-spacing: 0;
   line-height: 24px;
   font-weight: 400;
-  margin-top: 16px;
 }
 
 .maxminbox {
@@ -383,5 +515,33 @@ export default {
   color: #666666;
   font-weight: 400;
   margin-top: 36px;
+}
+
+.arrow_box {
+  width: 70px;
+  height: 70px;
+  align-items: center;
+  justify-content: center;
+}
+
+.date_box {
+  width: 686px;
+  height: 70px;
+  line-height: 1.2;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 10px;
+  vertical-align: middle;
+}
+
+.btn-l {
+  width: 28px;
+  height: 28px;
+}
+
+.btn-r {
+  width: 28px;
+  height: 28px;
 }
 </style>
